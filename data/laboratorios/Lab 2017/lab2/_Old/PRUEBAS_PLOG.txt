@@ -1,0 +1,33 @@
+
+MOVIMIENTOS VALIDOS HASTA EL BORDE
+
+trace, (prefijo_movimiento(estado(tablero(row(vertice(-1, []), vertice(-1, []), vertice(-1, []), vertice(1, []), vertice(1, []), vertice(1, []), vertice(-1, []), vertice(-1, []), vertice(-1, [])), 
+row(vertice(1, []), vertice(1, []), vertice(1, []), vertice(1, []), vertice(0, []), vertice(1, []), vertice(1, []), vertice(1, []), vertice(1, [])), 
+row(vertice(1, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(1, [])), 
+row(vertice(1, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(1, [])), 
+row(vertice(1, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(1, [])), 
+row(vertice(1, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(1, [])), 
+row(vertice(1, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(1, [(8,5),(8.6)]), vertice(1, [(8,6),(8,7)]), vertice(1, [(8,7)]), vertice(1, [(8,8)]), vertice(1, [])), 
+row(vertice(1, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(1, [(7,5)]), vertice(1, [(7,5),(7,6)]), vertice(1, [(7,6)]), vertice(0, []), vertice(1, [])), 
+row(vertice(1, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(1, [])), 
+row(vertice(1, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(1, [])), 
+row(vertice(1, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(1, [])), 
+row(vertice(1, []), vertice(1, []), vertice(1, []), vertice(1, []), vertice(0, []), vertice(1, []), vertice(1, []), vertice(1, []), vertice(1, [])), 
+row(vertice(-1, []), vertice(-1, []), vertice(-1, []), vertice(1, []), vertice(1, []), vertice(1, []), vertice(-1, []), vertice(-1, []), vertice(-1, []))), (7,5), 1),[p(1,0),p(2,0),p(3,0),p(3,1)])).
+
+
+VER QUE DA FALSE EN EL CASO INICIAL
+
+trace, (prefijo_movimiento(estado(tablero(row(vertice(-1, []), vertice(-1, []), vertice(-1, []), vertice(1, []), vertice(1, []), vertice(1, []), vertice(-1, []), vertice(-1, []), vertice(-1, [])), 
+row(vertice(1, []), vertice(1, []), vertice(1, []), vertice(1, []), vertice(0, []), vertice(1, []), vertice(1, []), vertice(1, []), vertice(1, [])), 
+row(vertice(1, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(1, [])), 
+row(vertice(1, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(1, [])), 
+row(vertice(1, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(1, [])), 
+row(vertice(1, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(1, [])), 
+row(vertice(1, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(1, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(1, [])), 
+row(vertice(1, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(1, [])), 
+row(vertice(1, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(1, [])), 
+row(vertice(1, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(1, [])), 
+row(vertice(1, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(0, []), vertice(1, [])), 
+row(vertice(1, []), vertice(1, []), vertice(1, []), vertice(1, []), vertice(0, []), vertice(1, []), vertice(1, []), vertice(1, []), vertice(1, [])), 
+row(vertice(-1, []), vertice(-1, []), vertice(-1, []), vertice(1, []), vertice(1, []), vertice(1, []), vertice(-1, []), vertice(-1, []), vertice(-1, []))), (7,5), 1),[p(1,0)])).
