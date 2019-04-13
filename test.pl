@@ -38,4 +38,9 @@ test(sin_elem_ejemplo_1) :- sin_elem([a, b, a, c], a, [b, c]).
 test(sin_elem_ejemplo_2) :- sin_elem([a, a], a, []).
 test(sin_elem_ejemplo_3) :- sin_elem([b, c], a, [b, c]).
 
+%% testear sublista/2.
+test(sublista_lista_vacia) :- sublista([1, 2, 3, 4], []).
+test(sublista_misma_lista) :- sublista([1, 2, 3, 4], [1, 2, 3, 4]).
+test(sublista_ejemplo) :- sublista([5, 2, 3, 1, 7], [2, 3, 1]).
+
 :- end_tests(lab1).
