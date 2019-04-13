@@ -1,4 +1,4 @@
-:- module(lab1, [largo/2, todos_iguales/1, concatenacion/3, contenida/2, ww/2, sin_elem/3]).
+:- module(lab1, [largo/2, todos_iguales/1, concatenacion/3, contenida/2, ww/2, wwR/2, sin_elem/3]).
 
 %% largo(+L,?N) <- N es el largo de la lista L.
 %% Ej.: largo([a,b,c],3).
@@ -33,7 +33,14 @@ contenida([C|L1], L2) :- member(C, L2), !, sin_elem(L1, C, L1sinC), sin_elem(L2,
 ww(L, V) :- L \= [], concatenacion(L1, L1, L), contenida(L1, V).
 
 %% wwR(?L,+V) <- La lista L es la concatenacion de una lista W y su reverso, con elementos pertenecientes al conjunto representado por la lista V, largo(L) >= 2.
-%% Ej.: wwR([a,b,b,a],[a,b]), wwR([a,c,a],[a,b,c]).
+%% Ej.: wwR([a,b,b,a],[a,b]), wwR([a,c,c,a],[a,b,c]).
+wwR(L, V) :- L \= [], concatenacionR(L1, L1, L), contenida(L1, V).
+
+%% Predicado auxiliar:
+%% concatenacionR(+L1,+Ac,?L) <- L es la lista que resulta de concatenar el reverso de L1 con L1, utilizando Ac como acumulador para una implementación eficiente.
+%% Ej.: concatenacionR([a, b], [a, b], [b, a, a, b]).
+concatenacionR([], Ac, Ac) :- !.
+concatenacionR([X|L1], Ac, L) :- concatenacionR(L1, [X|Ac], L).
 
 %% sin_elem(+L,?E,?LSinE) <- LSinE es la lista L sin ninguna ocurrencia del elemento E.
 %% Ejs.: sin_elem([a,b,a,c],a,[b,c]), sin_elem([a,a],a,[]), sin_elem([b,c],a,[b,c]).
