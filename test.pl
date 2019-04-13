@@ -24,4 +24,16 @@ test(contenida_un_repetido_en_primera) :- contenida([a, b, a], [a, b, c]).
 test(contenida_repetidos_en_ambas) :- contenida([a, b, a], [a, b, c, b, a]).
 test(contenida_dos_repetidos_en_primera) :- contenida([a, b, a, a, b], [a, b, c]).
 
+%% testear ww/2.
+test(ww_largo_igual_a_2) :- ww([a, a], [a, b, c]).
+test(ww_largo_mayor_a_2) :- ww([a, c, c, a, c, c], [a, b, c]).
+
+%% testear wwR/2.
+
+%% testaer sin_elem/3.
+test(sin_elem_caso_base) :- sin_elem([], a, []).
+test(sin_elem_ejemplo_1) :- sin_elem([a, b, a, c], a, [b, c]).
+test(sin_elem_ejemplo_2) :- sin_elem([a, a], a, []).
+test(sin_elem_ejemplo_3) :- sin_elem([b, c], a, [b, c]).
+
 :- end_tests(lab1).
