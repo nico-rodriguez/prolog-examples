@@ -29,6 +29,8 @@ test(ww_largo_igual_a_2) :- ww([a, a], [a, b, c]).
 test(ww_largo_mayor_a_2) :- ww([a, c, c, a, c, c], [a, b, c]).
 
 %% testear wwR/2.
+test(wwR_ejemplo_1) :- wwR([a, b, b, a], [a, b]).
+test(wwR_ejemplo_2) :- wwR([a, c, c, a], [a, b, c]).
 
 %% testaer sin_elem/3.
 test(sin_elem_caso_base) :- sin_elem([], a, []).
