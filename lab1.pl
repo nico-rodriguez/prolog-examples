@@ -1,4 +1,4 @@
-:- module(lab1, [largo/2, todos_iguales/1, concatenacion/3, contenida/2]).
+:- module(lab1, [largo/2, todos_iguales/1, concatenacion/3, contenida/2, ww/2, sin_elem/3]).
 
 %% largo(+L,?N) <- N es el largo de la lista L.
 %% Ej.: largo([a,b,c],3).
@@ -19,19 +19,24 @@ todos_iguales([C,C|R]) :- todos_iguales([C|R]).
 %% concatenacion(?L1,?L2,?L) <- La lista L es la concatenación de L1 con L2.
 %% Ej.: concatenacion([a,b,c],[d,e],[a,b,c,d,e]).
 concatenacion([], [], []).
-concatenacion(L1, [], L1).
-concatenacion([], L2, L2).
-concatenacion([C|L1], L2, [C|L]) :- concatenacion(L1, L2, L).
+concatenacion([C1|L1], [], [C1|L1]).
+concatenacion([], [C2|L2], [C2|L2]).
+concatenacion([C1|L1], [C2|L2], [C1|L]) :- concatenacion(L1, [C2|L2], L).
 
 %% contenida(?L1,+L2) <- todos los elementos de la lista L1 pertenecen a L2.
 %% Ej.: contenida([a,b,a,a],[a,b,c]).
 contenida([], _).
-contenida([C|L1], L2) :- member(C, L2), quitar_elemento(C, L1, L1sinC), quitar_elemento(C, L2, L2sinC), contenida(L1sinC, L2sinC).
+contenida([C|L1], L2) :- member(C, L2), sin_elem(L1, C, L1sinC), sin_elem(L2, C, L2sinC), contenida(L1sinC, L2sinC).
 
-%% quitar_elemento(E, L1, L2) <- predicado auxiliar: es verdadero si L2 es la lista L1 sin el elemento E (incluye el caso en que E no pertence a L1).
-%% Ej.: quitar_elemento(a,[a,b,a,a],[b]), quitar_elemento(a,[b,c,d],[b,c,d]).
-quitar_elemento(_, [], []).
-quitar_elemento(E, [E|L1], [E|L2]) :- quitar_elemento(E, L1, L2).
-quitar_elemento(E, [C|L1], [C|L2]) :- C \= E, quitar_elemento(E, L1, L2).
+%% ww(?L,+V) <- La lista L es la concatenación consigo misma de una lista W, cuyos elementos pertenecen al conjunto representado por la lista V, largo(L) >= 2.
+%% Ej.: ww([a,c,c,a,c,c],[a,b,c]).
+ww(L, V) :- L \= [], concatenacion(L1, L1, L), contenida(L1, V).
 
+%% wwR(?L,+V) <- La lista L es la concatenacion de una lista W y su reverso, con elementos pertenecientes al conjunto representado por la lista V, largo(L) >= 2.
+%% Ej.: wwR([a,b,b,a],[a,b]), wwR([a,c,a],[a,b,c]).
 
+%% sin_elem(+L,?E,?LSinE) <- LSinE es la lista L sin ninguna ocurrencia del elemento E.
+%% Ejs.: sin_elem([a,b,a,c],a,[b,c]), sin_elem([a,a],a,[]), sin_elem([b,c],a,[b,c]).
+sin_elem([], _, []).
+sin_elem([E|L1], E, L2) :- sin_elem(L1, E, L2).
+sin_elem([C|L1], E, [C|L2]) :- C \= E, sin_elem(L1, E, L2).
