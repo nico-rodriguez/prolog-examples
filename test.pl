@@ -39,8 +39,21 @@ test(sin_elem_ejemplo_2) :- sin_elem([a, a], a, []).
 test(sin_elem_ejemplo_3) :- sin_elem([b, c], a, [b, c]).
 
 %% testear sublista/2.
-test(sublista_lista_vacia) :- sublista([1, 2, 3, 4], []).
-test(sublista_misma_lista) :- sublista([1, 2, 3, 4], [1, 2, 3, 4]).
-test(sublista_ejemplo) :- sublista([5, 2, 3, 1, 7], [2, 3, 1]).
+test(sublista2_lista_vacia) :- sublista([1, 2, 3, 4], []).
+test(sublista2_misma_lista) :- sublista([1, 2, 3, 4], [1, 2, 3, 4]).
+test(sublista2_ejemplo) :- sublista([5, 2, 3, 1, 7], [2, 3, 1]).
+
+%% testear enesimo/3.
+test(enesimo_ejemplo_1) :- enesimo([5, 2, 3, 1, 7], 4, 1).
+test(enesimo_ejemplo_2) :- enesimo([5, 2, [3, 1], 7], 3, [3, 1]).
+
+%% testear sublist/4.
+test(sublista4_ejemplo) :- sublista([5, 2, 3, 1, 7], [2, 3, 1], 2, 4).
+test(sublista_caso_1) :- sublista([1, 2, 3, 4], [2, 3], I, J), I = 2, J = 3.
+test(sublista_caso_2) :- sublista([1, 2, 3, 4], Sub, 2, 3), Sub = [2, 3].
+test(sublista_caso_3) :- sublista(L, [2, 3], 2, J), L = [_, 2, 3|_], J = 3.
+test(sublista_caso_4) :- sublista(L, [2, 3], I, 3), L = [_, 2, 3|_], I = 2.
+
+
 
 :- end_tests(lab1).
