@@ -62,24 +62,18 @@ prefijo(L, P) :- concatenacion(P, _, L). % <- La lista P es un prefijo de la lis
 %% Ej.: sufijo([a,b,c],[a,b,c]), sufijo([a,b,c,d,e],[d,e]).
 sufijo(L, S) :- concatenacion(_, S, L). % <- La lista S es un sufijo de la lista L.
 
-%% enesimo(?L,+N,?E) <- El elemento E está en la N-sima posición en la lista L.
+%% enesimo(?L,?N,?E) <- El elemento E está en la N-sima posición en la lista L.
 %% Ej.: enesimo([5,2,3,1,7],4,1). enesimo([5,2,[3,1],7],3,[3,1]).
-enesimo([_|L], N, E) :- N > 1, N1 is N-1, enesimo(L, N1, E).
-enesimo([E|_], N, E) :- N = 1.
+enesimo(L, N, E) :- enesimo_ac(L, N, 1, E).
+
+%% Predicado auxiliar:
+%% enesimo_ac(?L,?N,?Ac,?E) <- E es el N-esimo elemento de la lista L. Se utiliza Ac como acumulador.
+%% Ej.: enesimo_ac([5,2,3,1,7],4,1,1). enesimo_ac([5,2,[3,1],7],3,1,[3,1]).
+enesimo_ac([E|_], Ac, Ac, E).
+enesimo_ac([C|L], N, Ac, E) :- C \= E, Ac1 is Ac+1, enesimo_ac(L, N, Ac1, E).
 
 %% sublista(?L,?Sub,?I,?J) <-   Sub contiene un subconjunto de elementos contiguos de L en el mismo orden que aparecen en L, empezando en la posición I-ésima
 %%                              de L y terminado en la J-ésima.
 %% Ej.: sublista([5,2,3,1,7],[2,3,1],2,4).
-sublista(L, Sub, I, J) :- ground(Sub), var(I), nonvar(J), largo(Sub, NSub), I is J-NSub+1, sublista(L, Sub, I, J).
-sublista(L, Sub, I, J) :- ground(Sub), nonvar(I), var(J), largo(Sub, NSub), J is I+NSub-1, sublista(L, Sub, I, J).
-sublista([_|L], L1, I, J) :- nonvar(I), nonvar(J), I > 1, I1 is I-1, J1 is J-1, sublista(L, L1, I1, J1). % <- primero se busca la posición I de la lista L.
-sublista([C|L], [C|L1], I, J) :- nonvar(I), nonvar(J), I == 1, I < J, J1 is J-1, sublista(L, L1, I, J1). % <- cuando se alcanzó la posición I de la lista L, se guardan los elementos.
-sublista([C|_], [C], I, J) :- nonvar(I), nonvar(J), I == 1, I == J. % <- se guardan en total J-I elementos de L.
-sublista(L, Sub, I, J) :- var(I), var(J), encontrar_indices(L, Sub, 1, J), largo(Sub, NSub), I is J-NSub+1.
-
-%% Predicado auxiliar:
-%% encontrar_indices(+L,+Sub,+I,?J) <- Encontrar el índice J dentro de la lista L, en donde termina la lista Sub como sublista de L.
-%% Ej.: encontrar_indices([1,2,3,4],[2,3],I,J) -> I=2,J=3.
-encontrar_indices([C|L], [C|Sub], I, J) :- prefijo(L, Sub), largo(Sub, NSub), J is I+NSub.
-encontrar_indices([C|L], [C|Sub], I, J) :- I1 is I+1, encontrar_indices(L, [C|Sub], I1, J). % <- caso en el que no se cumple prefijo(L, Sub).
-encontrar_indices([C|L], [X|Sub], I, J) :- C \= X, I1 is I+1, encontrar_indices(L, [X|Sub], I1, J).
+sublista(_, [], 0, 0).
+sublista(L, [S|Sub], I, J) :- sufijo(L, Sufijo), prefijo(Sufijo, [S|Sub]), enesimo(L, I, S), largo(Sub, NSub), J is I+NSub.
