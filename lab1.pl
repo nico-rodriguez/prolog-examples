@@ -1,4 +1,4 @@
-:- module(lab1, [largo/2, todos_iguales/1, concatenacion/3, contenida/2, ww/2, sin_elem/3, matriz/3, valor_celda/4, fila/3, col/3]).
+:- module(lab1, [largo/2, todos_iguales/1, concatenacion/3, contenida/2, ww/2, wwR/2, sin_elem/3, sublista/2, enesimo/3, sublista/4matriz/3, valor_celda/4, fila/3, col/3]).
 
 %% ----------------
 %% 		listas
@@ -37,13 +37,51 @@ contenida([C|L1], L2) :- member(C, L2), sin_elem(L1, C, L1sinC), sin_elem(L2, C,
 ww(L, V) :- L \= [], concatenacion(L1, L1, L), contenida(L1, V).
 
 %% wwR(?L,+V) <- La lista L es la concatenacion de una lista W y su reverso, con elementos pertenecientes al conjunto representado por la lista V, largo(L) >= 2.
-%% Ej.: wwR([a,b,b,a],[a,b]), wwR([a,c,a],[a,b,c]).
+%% Ej.: wwR([a,b,b,a],[a,b]), wwR([a,c,c,a],[a,b,c]).
+wwR(L, V) :- L \= [], concatenacionR(L1, L1, L), contenida(L1, V).
+
+%% Predicado auxiliar:
+%% concatenacionR(+L1,+Ac,?L) <- L es la lista que resulta de concatenar el reverso de L1 con L1, utilizando Ac como acumulador para una implementación eficiente.
+%% Ej.: concatenacionR([a, b], [a, b], [b, a, a, b]).
+concatenacionR([], Ac, Ac).
+concatenacionR([X|L1], Ac, L) :- concatenacionR(L1, [X|Ac], L).
 
 %% sin_elem(+L,?E,?LSinE) <- LSinE es la lista L sin ninguna ocurrencia del elemento E.
 %% Ejs.: sin_elem([a,b,a,c],a,[b,c]), sin_elem([a,a],a,[]), sin_elem([b,c],a,[b,c]).
 sin_elem([], _, []).
 sin_elem([E|L1], E, L2) :- sin_elem(L1, E, L2).
 sin_elem([C|L1], E, [C|L2]) :- C \= E, sin_elem(L1, E, L2).
+
+%% sublista(?L,?Sub) <- Sub contiene un subconjunto de elementos contiguos de L en el mismo orden que aparecen en L.
+%% Ej.: sublista([5,2,3,1,7],[2,3,1]).
+sublista(L, S) :- sufijo(L, Sufijo), prefijo(Sufijo, S). % <- Las sublistas son prefijos de sufijos de la lista original.
+
+%% Predicado auxiliar:
+%% prefijo(?L,?P) <- La lista P es un prefijo de la lista L.
+%% Ej.: prefijo([a,b,c],[a,b,c]), prefijo([a,b,c,d,e],[a,b,c]).
+prefijo(L, P) :- concatenacion(P, _, L). % <- La lista P es un prefijo de la lista L.
+
+%% Predicado auxiliar:
+%% sufijo(?L,?S) <- La lista S es un sufijo de la lista L.
+%% Ej.: sufijo([a,b,c],[a,b,c]), sufijo([a,b,c,d,e],[d,e]).
+sufijo(L, S) :- concatenacion(_, S, L). % <- La lista S es un sufijo de la lista L.
+
+%% enesimo(?L,?N,?E) <- El elemento E está en la N-sima posición en la lista L.
+%% Ej.: enesimo([5,2,3,1,7],4,1). enesimo([5,2,[3,1],7],3,[3,1]).
+enesimo(L, N, E) :- enesimo_ac(L, N, 1, E).
+
+%% Predicado auxiliar:
+%% enesimo_ac(?L,?N,?Ac,?E) <- E es el N-esimo elemento de la lista L. Se utiliza Ac como acumulador.
+%% Ej.: enesimo_ac([5,2,3,1,7],4,1,1). enesimo_ac([5,2,[3,1],7],3,1,[3,1]).
+enesimo_ac([E|_], Ac, Ac, E).
+enesimo_ac([C|L], N, Ac, E) :- C \= E, Ac1 is Ac+1, enesimo_ac(L, N, Ac1, E).
+
+%% sublista(?L,?Sub,?I,?J) <-   Sub contiene un subconjunto de elementos contiguos de L en el mismo orden que aparecen en L, empezando en la posición I-ésima
+%%                              de L y terminado en la J-ésima.
+%% Ej.: sublista([5,2,3,1,7],[2,3,1],2,4).
+sublista(_, [], 0, 0).
+sublista(L, [S|Sub], I, J) :- sufijo(L, Sufijo), prefijo(Sufijo, [S|Sub]), enesimo(L, I, S), largo(Sub, NSub), J is I+NSub.
+
 
 %% ------------------
 %% 		matrices
