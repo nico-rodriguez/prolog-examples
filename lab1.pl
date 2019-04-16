@@ -1,4 +1,8 @@
-:- module(lab1, [largo/2, todos_iguales/1, concatenacion/3, contenida/2, ww/2, sin_elem/3]).
+:- module(lab1, [largo/2, todos_iguales/1, concatenacion/3, contenida/2, ww/2, sin_elem/3, matriz/3, valor_celda/4, fila/3, col/3]).
+
+%% ----------------
+%% 		listas
+%% ----------------
 
 %% largo(+L,?N) <- N es el largo de la lista L.
 %% Ej.: largo([a,b,c],3).
@@ -40,3 +44,42 @@ ww(L, V) :- L \= [], concatenacion(L1, L1, L), contenida(L1, V).
 sin_elem([], _, []).
 sin_elem([E|L1], E, L2) :- sin_elem(L1, E, L2).
 sin_elem([C|L1], E, [C|L2]) :- C \= E, sin_elem(L1, E, L2).
+
+%% ------------------
+%% 		matrices
+%% ------------------
+
+matriz(0,_,[]).
+matriz(M,N,[C|R]) :- M>0, M1 is M-1, matriz(M1,N,R), largo(C,N).
+
+%% valor_celda(+I,+J,+A,?E) <- E es el contenido de la celda (I,J) de la matriz A.
+%% Ej.: valor_celda(2,1,[[8,-10,1],[5,4,2], [7,9,3]],5)
+valor_celda(1,J,[C|_],E) :- valor_posicion(J,C,E).
+valor_celda(I,J,[_|R],E) :- I>1, I1 is I-1, valor_celda(I1,J,R,E).
+
+%% valor_posicion(+J,+F,?E) ← E es el contenido de la posicion j de la fila F.
+%% Ej.: valor_posicion(2,[2,3,5],3)
+valor_posicion(1,[C|_],C).
+valor_posicion(J,[_|R],E) :- J>1, J1 is J-1, valor_posicion(J1,R,E).
+
+%% fila(+M,?N,?F) <- F es la fila N-ésima de la matriz
+%% Ej.: fila([[8,-10,1],[5,4,2],[7,9,3]],3,[7,9,3]).
+fila([C|_],1,C).
+fila([_|R],N,F) :- N>0, N1 is N-1, fila(R,N1,F).
+
+%% col(+M,?N,?C) <- C es la columna N-ésima de la matriz
+%% Ej.: col([[8,-10,1],[5,4,2],[7,9,3]],2,[-10,4,9])
+col([],_,[]).
+col([C|R],N,[X|Y]) :- N>0, valor_posicion(N,C,X), col(R,N,Y).
+
+%% diagonalD(+M,coord(?I,?J),?Dir) <- Dir es una diagonal de la matriz M, con índices de fila y de columna consecutivos crecientes. El 1er elemento de Dir tiene coordenadas I,J. Los elementos de la fila 1 y los de la columna 1 son los posibles 1eros elementos de Dir
+%% Ej.:diagonalD([[8,-10,1],[5,4,2], [7,9,3]],coord(1,2),[-10,2])
+%% Ej.:diagonalD([[8,-10,1],[5,4,2], [7,9,3]],coord(2,1),[5,9])
+%% Ej.:diagonalD([[8,-10,1],[5,4,2], [7,9,3]],coord(1,1),[8,4,3])
+%% Ej.:diagonalD([[8,-10,1],[5,4,2], [7,9,3]],coord(3,1),[7])
+
+%% diagonalI(+M,coord((?I,?J),?Inv) <- Inv es una una diagonal inversa de la matriz M, con índices de fila consecutivos decrecientes y de columna consecutivos crecientes. El 1er elemento de Inv tiene coordenadas I,J. Los elementos de la columna 1 y los de la última fila son los posibles 1eros elementos de Inv
+%% Ej.:diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(3,2),[9,2])
+%% Ej.:diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(2,1),[5,-10])
+%% Ej.:diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(1,1),[8])
+%% Ej.:diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(3,1),[7,4,1])
