@@ -1,4 +1,4 @@
-:- module(lab1, [largo/2, todos_iguales/1, concatenacion/3, contenida/2, ww/2, wwR/2, sin_elem/3, sublista/2, enesimo/3, sublista/4matriz/3, valor_celda/4, fila/3, col/3]).
+:- module(lab1, [largo/2, todos_iguales/1, concatenacion/3, contenida/2, ww/2, wwR/2, sin_elem/3, sublista/2, enesimo/3, sublista/4, matriz/3, valor_celda/4, fila/3, col/3]).
 
 %% ----------------
 %% 		listas
@@ -87,28 +87,31 @@ sublista(L, [S|Sub], I, J) :- sufijo(L, Sufijo), prefijo(Sufijo, [S|Sub]), enesi
 %% 		matrices
 %% ------------------
 
+%% matriz(?M,?N,+A) ← A es una matriz de M filas y N columnas. La matriz se representa mediante una lista de M filas, donde cada fila es una lista de N celdas.
+%% Ej.: matriz(3,3,[[8,-10,1],[5,4,2], [7,9,3]]).
 matriz(0,_,[]).
-matriz(M,N,[C|R]) :- M>0, M1 is M-1, matriz(M1,N,R), largo(C,N).
+matriz(M,N,[C|R]) :- matriz(M1,N,R), largo(C,N), M is M1+1.
 
 %% valor_celda(+I,+J,+A,?E) <- E es el contenido de la celda (I,J) de la matriz A.
 %% Ej.: valor_celda(2,1,[[8,-10,1],[5,4,2], [7,9,3]],5)
 valor_celda(1,J,[C|_],E) :- valor_posicion(J,C,E).
-valor_celda(I,J,[_|R],E) :- I>1, I1 is I-1, valor_celda(I1,J,R,E).
+valor_celda(I,J,[_|R],E) :- valor_celda(I1,J,R,E), I is I1+1.
 
 %% valor_posicion(+J,+F,?E) ← E es el contenido de la posicion j de la fila F.
 %% Ej.: valor_posicion(2,[2,3,5],3)
 valor_posicion(1,[C|_],C).
-valor_posicion(J,[_|R],E) :- J>1, J1 is J-1, valor_posicion(J1,R,E).
+valor_posicion(J,[_|R],E) :- valor_posicion(J1,R,E), J is J1+1.
 
 %% fila(+M,?N,?F) <- F es la fila N-ésima de la matriz
 %% Ej.: fila([[8,-10,1],[5,4,2],[7,9,3]],3,[7,9,3]).
 fila([C|_],1,C).
-fila([_|R],N,F) :- N>0, N1 is N-1, fila(R,N1,F).
+fila([_|R],N,F) :- fila(R,N1,F), N is N1+1.
 
 %% col(+M,?N,?C) <- C es la columna N-ésima de la matriz
 %% Ej.: col([[8,-10,1],[5,4,2],[7,9,3]],2,[-10,4,9])
 col([],_,[]).
-col([C|R],N,[X|Y]) :- N>0, valor_posicion(N,C,X), col(R,N,Y).
+col([C|R],N,[X|Y]) :- valor_posicion(N,C,X), col(R,N,Y).
+
 
 %% diagonalD(+M,coord(?I,?J),?Dir) <- Dir es una diagonal de la matriz M, con índices de fila y de columna consecutivos crecientes. El 1er elemento de Dir tiene coordenadas I,J. Los elementos de la fila 1 y los de la columna 1 son los posibles 1eros elementos de Dir
 %% Ej.:diagonalD([[8,-10,1],[5,4,2], [7,9,3]],coord(1,2),[-10,2])
