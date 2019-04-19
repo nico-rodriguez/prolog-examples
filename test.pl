@@ -96,4 +96,17 @@ test(col_caso_2) :- col([[8,-10,1],[5,4,2],[7,9,3]],2,C), C=[-10,4,9].
 test(col_caso_3) :- col([[8,-10,1],[5,4,2],[7,9,3]],N,[1,2,3]), N=3.
 test(col_caso_4) :- col([[8,-10,1],[5,4,2],[7,9,3]],3,C), C=[1,2,3].
 
+
+%% diagonalD(+M,coord(?I,?J),?Dir)/3
+test(diagonalD_ejemplo_1) :- diagonalD([[8,-10,1],[5,4,2],[7,9,3]],coord(1,2),[-10,2]).
+test(diagonalD_ejemplo_2) :- diagonalD([[8,-10,1],[5,4,2],[7,9,3]],coord(2,1),[5,9]).
+test(diagonalD_ejemplo_3) :- diagonalD([[8,-10,1],[5,4,2],[7,9,3]],coord(1,1),[8,4,3]).
+test(diagonalD_ejemplo_4) :- diagonalD([[8,-10,1],[5,4,2],[7,9,3]],coord(3,1),[7]).
+
+%% diagonalI(+M,coord((?I,?J),?Inv)/3
+%% test(diagonalI_ejemplo_1) :- diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(3,2),[9,2]).
+%% test(diagonalI_ejemplo_2) :- diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(2,1),[5,-10]).
+%% test(diagonalI_ejemplo_3) :- diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(1,1),[8]).
+%% test(diagonalI_ejemplo_4) :- diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(3,1),[7,4,1]).
+
 :- end_tests(lab1).

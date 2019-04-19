@@ -1,4 +1,4 @@
-:- module(lab1, [largo/2, todos_iguales/1, concatenacion/3, contenida/2, ww/2, wwR/2, sin_elem/3, sublista/2, enesimo/3, sublista/4, matriz/3, valor_celda/4, fila/3, col/3]).
+:- module(lab1, [largo/2, todos_iguales/1, concatenacion/3, contenida/2, ww/2, wwR/2, sin_elem/3, sublista/2, enesimo/3, sublista/4, matriz/3, valor_celda/4, fila/3, col/3, diagonalD/3]).
 
 %% ----------------
 %% 		listas
@@ -97,7 +97,7 @@ matriz(M,N,[C|R]) :- matriz(M1,N,R), largo(C,N), M is M1+1.
 valor_celda(1,J,[C|_],E) :- valor_posicion(J,C,E).
 valor_celda(I,J,[_|R],E) :- valor_celda(I1,J,R,E), I is I1+1.
 
-%% valor_posicion(+J,+F,?E) ← E es el contenido de la posicion j de la fila F.
+%% valor_posicion(?J,+F,?E) ← E es el contenido de la posicion j de la fila F.
 %% Ej.: valor_posicion(2,[2,3,5],3)
 valor_posicion(1,[C|_],C).
 valor_posicion(J,[_|R],E) :- valor_posicion(J1,R,E), J is J1+1.
@@ -118,6 +118,12 @@ col([C|R],N,[X|Y]) :- valor_posicion(N,C,X), col(R,N,Y).
 %% Ej.:diagonalD([[8,-10,1],[5,4,2], [7,9,3]],coord(2,1),[5,9])
 %% Ej.:diagonalD([[8,-10,1],[5,4,2], [7,9,3]],coord(1,1),[8,4,3])
 %% Ej.:diagonalD([[8,-10,1],[5,4,2], [7,9,3]],coord(3,1),[7])
+diagonalD([C],coord(1,N),[E]) :- valor_posicion(N,C,E).
+diagonalD(A,coord(1,J),[C]) :- matriz(_,N,A), J=N, valor_celda(1,J,A,C).
+diagonalD([C|R],coord(1,J),[X|Y]) :- matriz(_,_,[C|R]), diagonalD(R,coord(1,J1),Y), valor_posicion(J,C,X),  J is J1-1.
+diagonalD([_|R],coord(I,J),Dir) :- diagonalD(R,coord(I1,J),Dir), I is I1+1.
+
+
 
 %% diagonalI(+M,coord((?I,?J),?Inv) <- Inv es una una diagonal inversa de la matriz M, con índices de fila consecutivos decrecientes y de columna consecutivos crecientes. El 1er elemento de Inv tiene coordenadas I,J. Los elementos de la columna 1 y los de la última fila son los posibles 1eros elementos de Inv
 %% Ej.:diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(3,2),[9,2])
