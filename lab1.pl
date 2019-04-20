@@ -74,7 +74,7 @@ enesimo(L, N, E) :- enesimo_ac(L, N, 1, E).
 %% enesimo_ac(?L,?N,?Ac,?E) <- E es el N-esimo elemento de la lista L. Se utiliza Ac como acumulador.
 %% Ej.: enesimo_ac([5,2,3,1,7],4,1,1). enesimo_ac([5,2,[3,1],7],3,1,[3,1]).
 enesimo_ac([E|_], Ac, Ac, E).
-enesimo_ac([C|L], N, Ac, E) :- C \= E, Ac1 is Ac+1, enesimo_ac(L, N, Ac1, E).
+enesimo_ac([C|L], N, Ac, E) :- C \== E, Ac1 is Ac+1, enesimo_ac(L, N, Ac1, E).
 
 %% sublista(?L,?Sub,?I,?J) <-   Sub contiene un subconjunto de elementos contiguos de L en el mismo orden que aparecen en L, empezando en la posición I-ésima
 %%                              de L y terminado en la J-ésima.
