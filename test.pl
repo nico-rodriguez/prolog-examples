@@ -109,4 +109,15 @@ test(diagonalD_ejemplo_4) :- diagonalD([[8,-10,1],[5,4,2],[7,9,3]],coord(3,1),[7
 %% test(diagonalI_ejemplo_3) :- diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(1,1),[8]).
 %% test(diagonalI_ejemplo_4) :- diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(3,1),[7,4,1]).
 
+%% sopa/3
+test(sopa_caso_1):- MatrizSopa = [[a,g,h,o,l,a,f,g],
+                                  [h,k,b,j,x,v,b,j],
+                                  [g,c,a,g,d,b,k,n],
+                                  [g,j,j,r,p,r,a,f],
+                                  [j,b,b,i,l,u,h,l],
+                                  [b,j,t,w,h,p,d,t],
+                                  [l,a,w,m,r,m,a,u],
+                                  [e,h,r,z,s,h,j,p]],
+                    sopa(MatrizSopa,[[h,o,l,a]],[p([h,o,l,a],((1,3),(1,6)))]).
+
 :- end_tests(lab1).

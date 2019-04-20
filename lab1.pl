@@ -1,4 +1,4 @@
-:- module(lab1, [largo/2, todos_iguales/1, concatenacion/3, contenida/2, ww/2, wwR/2, sin_elem/3, sublista/2, enesimo/3, sublista/4, matriz/3, valor_celda/4, fila/3, col/3, diagonalD/3]).
+:- module(lab1, [largo/2, todos_iguales/1, concatenacion/3, contenida/2, ww/2, wwR/2, sin_elem/3, sublista/2, enesimo/3, sublista/4, matriz/3, valor_celda/4, fila/3, col/3, diagonalD/3, sopa/3]).
 
 %% ----------------
 %% 		listas
@@ -130,3 +130,18 @@ diagonalD([_|R],coord(I,J),Dir) :- diagonalD(R,coord(I1,J),Dir), I is I1+1.
 %% Ej.:diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(2,1),[5,-10])
 %% Ej.:diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(1,1),[8])
 %% Ej.:diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(3,1),[7,4,1])
+
+
+%% sopa(+M,+Pals,?Coords) <- Coords es una lista de elementos de la forma p(Pal,((I1,J1),(I2,J2)))
+%% - donde ((I1,J1),(I2,J2)) es el par de coordenadas que indica los índices inicial y final de la palabra Pal (lista de letras) en la matriz M
+%% - debe haber un elemento en Coords para cada palabra de Pals
+sopaFila(M,Pals,p(PalN,((NroFila,IniCol),(NroFila,FinCol)))):-
+                         enesimo(Pals,_,PalN),
+                         fila(M,NroFila,Fila),
+                         sublista(Fila,PalN,IniCol,FinCol).
+
+sopa(_,[],[]).
+sopa(M,Pals,[p(Pal,((NroFila,IniCol),(NroFila,FinCol)))|CoordsT]):-
+                                  sopaFila(M,Pals,p(Pal,((NroFila,IniCol),(NroFila,FinCol)))),
+                                  sin_elem(Pals,Pal,PalsSinE),
+                                  sopa(M,PalsSinE,CoordsT).
