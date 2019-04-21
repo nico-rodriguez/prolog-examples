@@ -152,8 +152,18 @@ coordPalabraColumnas(M,Pals,p(PalN,[(IniFila,NroCol),(FinFila,NroCol)])) :-
         col(M,NroCol,Columna),
         buscaPalabra(Columna,PalN,IniFila,FinFila).
 
+coordPalabraDiagonal(M,Pals,p(PalN,[(NroFila1,NroCol1),(NroFila2,NroCol2)])) :-
+        enesimo(Pals,_,PalN),
+        diagonalD(M,coord(I,J),Diagonal),
+        buscaPalabra(Diagonal,PalN,Ini,Fin),
+        NroFila1 is I  + Ini - 1,
+        NroCol1  is J  + Ini - 1,
+        NroFila2 is I  + Fin - 1,
+        NroCol2  is J  + Fin - 1.
+
 coordPalabra(M,Pals,Coords) :- coordPalabraFilas(M,Pals,Coords).
 coordPalabra(M,Pals,Coords) :- coordPalabraColumnas(M,Pals,Coords).
+coordPalabra(M,Pals,Coords) :- coordPalabraDiagonal(M,Pals,Coords).
 
 sopa(_,[],[]).
 sopa(M,Pals,[CoordsH|CoordsT]) :-
