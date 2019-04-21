@@ -110,14 +110,26 @@ test(diagonalD_ejemplo_4) :- diagonalD([[8,-10,1],[5,4,2],[7,9,3]],coord(3,1),[7
 %% test(diagonalI_ejemplo_4) :- diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(3,1),[7,4,1]).
 
 %% sopa/3
-test(sopa_caso_1):- MatrizSopa = [[a,g,h,o,l,a,f,g],
-                                  [h,k,b,j,x,v,b,j],
-                                  [g,c,a,g,d,b,k,n],
-                                  [g,j,j,r,p,r,a,f],
-                                  [j,b,b,i,l,u,h,l],
-                                  [b,j,t,w,h,p,d,t],
-                                  [l,a,w,m,r,m,a,u],
-                                  [e,h,r,z,s,h,j,p]],
-                    sopa(MatrizSopa,[[h,o,l,a]],[p([h,o,l,a],((1,3),(1,6)))]).
+matrizSopa([[a,c,a,v,d,c,k,c],
+            [o,y,w,l,o,b,a,e],
+            [v,s,m,n,z,n,k,r],
+            [a,o,e,p,i,p,o,d],
+            [p,j,v,l,o,t,u,o],
+            [o,w,l,e,a,l,p,e],
+            [o,a,q,p,j,t,l,w],
+            [g,j,q,i,t,a,e,o]]).
+
+palabras([[c,e,r,d,o],
+          [p,a,v,o],
+          [l,e,a,l]]).
+
+coordenadas([p([c,e,r,d,o],[(1,8),(5,8)]),
+             p([p,a,v,o],[(5,1),(2,1)]),
+             p([l,e,a,l],[(6,3),(6,6)])]).
+
+test(sopa_caso_1):- matrizSopa(MatrizSopa),
+                    palabras(Palabras),
+                    coordenadas(Coordenadas),
+                    sopa(MatrizSopa,Palabras,Coordenadas).
 
 :- end_tests(lab1).

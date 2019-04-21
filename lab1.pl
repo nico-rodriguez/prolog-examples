@@ -135,13 +135,29 @@ diagonalD([_|R],coord(I,J),Dir) :- diagonalD(R,coord(I1,J),Dir), I is I1+1.
 %% sopa(+M,+Pals,?Coords) <- Coords es una lista de elementos de la forma p(Pal,((I1,J1),(I2,J2)))
 %% - donde ((I1,J1),(I2,J2)) es el par de coordenadas que indica los índices inicial y final de la palabra Pal (lista de letras) en la matriz M
 %% - debe haber un elemento en Coords para cada palabra de Pals
-sopaFila(M,Pals,p(PalN,((NroFila,IniCol),(NroFila,FinCol)))):-
-                         enesimo(Pals,_,PalN),
-                         fila(M,NroFila,Fila),
-                         sublista(Fila,PalN,IniCol,FinCol).
+reverso_ac([],Ac,Ac).
+reverso_ac([H|T],Ac,Reverso) :- reverso_ac(T,[H|Ac],Reverso).
+reverso(Texto,Reverso) :- reverso_ac(Texto,[],Reverso).
+
+buscaPalabra(Texto,Pal,Ini,Fin) :- sublista(Texto,Pal,Ini,Fin).
+buscaPalabra(Texto,Pal,Ini,Fin) :- reverso(Pal,Reverso), sublista(Texto,Reverso,Fin,Ini).
+
+coordPalabraFilas(M,Pals,p(PalN,[(NroFila,IniCol),(NroFila,FinCol)])) :-
+        enesimo(Pals,_,PalN),
+        fila(M,NroFila,Fila),
+        buscaPalabra(Fila,PalN,IniCol,FinCol).
+
+coordPalabraColumnas(M,Pals,p(PalN,[(IniFila,NroCol),(FinFila,NroCol)])) :-
+        enesimo(Pals,_,PalN),
+        col(M,NroCol,Columna),
+        buscaPalabra(Columna,PalN,IniFila,FinFila).
+
+coordPalabra(M,Pals,Coords) :- coordPalabraFilas(M,Pals,Coords).
+coordPalabra(M,Pals,Coords) :- coordPalabraColumnas(M,Pals,Coords).
 
 sopa(_,[],[]).
-sopa(M,Pals,[p(Pal,((NroFila,IniCol),(NroFila,FinCol)))|CoordsT]):-
-                                  sopaFila(M,Pals,p(Pal,((NroFila,IniCol),(NroFila,FinCol)))),
-                                  sin_elem(Pals,Pal,PalsSinE),
-                                  sopa(M,PalsSinE,CoordsT).
+sopa(M,Pals,[CoordsH|CoordsT]) :-
+        coordPalabra(M,Pals,CoordsH),
+        CoordsH = p(Pal,[(_,_),(_,_)]),
+        sin_elem(Pals,Pal,PalsSinE),
+        sopa(M,PalsSinE,CoordsT).
