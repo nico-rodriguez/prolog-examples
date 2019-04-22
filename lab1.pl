@@ -80,7 +80,8 @@ enesimo_ac([C|L], N, Ac, E) :- C \== E, Ac1 is Ac+1, enesimo_ac(L, N, Ac1, E).
 %%                              de L y terminado en la J-ésima.
 %% Ej.: sublista([5,2,3,1,7],[2,3,1],2,4).
 sublista(_, [], 0, 0).
-sublista(L, [S|Sub], I, J) :- sufijo(L, Sufijo), prefijo(Sufijo, [S|Sub]), enesimo(L, I, S), largo(Sub, NSub), J is I+NSub.
+sublista(L, [S], J, J) :- enesimo(L, J, S).
+sublista(L, [S|Sub], I, J) :- enesimo(L, I, S), I1 is I+1, sublista(L, Sub, I1, J).
 
 
 %% ------------------
