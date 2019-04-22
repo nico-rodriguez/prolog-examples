@@ -8,6 +8,8 @@
 %% testear largo/2.
 test(largo_no_vacia) :- largo([1,2,3,4], 4).
 test(largo_vacia) :- largo([], 0).
+test(largo_sin_instanciar_N) :- largo([1,2,3,4], N), N = 4.
+test(largo_sin_instanciar_L) :- largo(L, 4), L = [_,_,_,_].
 %% test(falla) :- 1 is 0. % <- test verifica que el predicado es verdadero y que no quedan puntos de backtracking por explorar. Por ejemplo, este test falla si se descomenta.
 
 %% testear todos_iguales/1.
@@ -21,6 +23,9 @@ test(concatenacion_ambas_vacias) :- concatenacion([], [], []).
 test(concatenacion_segunda_vacia) :- concatenacion([1, 2, 3], [], [1, 2, 3]).
 test(concatenacion_primera_vacia) :- concatenacion([], [4, 5], [4, 5]).
 test(concatenacion_ninguna_vacia) :- concatenacion([1, 2, 3], [4, 5], [1, 2, 3, 4, 5]).
+test(concatenacion_sin_instanciar_lista_1) :- concatenacion(L, [4, 5], [1, 2, 3, 4, 5]), L = [1, 2, 3].
+test(concatenacion_sin_instanciar_lista_2) :- concatenacion([1, 2, 3], L, [1, 2, 3, 4, 5]), L = [4, 5].
+test(concatenacion_sin_instanciar_lista_3) :- concatenacion([1, 2, 3], [4, 5], L), L = [1, 2, 3, 4, 5].
 
 %% testear contenida/2.
 test(contenida_vacia) :- contenida([], [a, b, c]).
@@ -41,6 +46,8 @@ test(sin_elem_caso_base) :- sin_elem([], a, []).
 test(sin_elem_ejemplo_1) :- sin_elem([a, b, a, c], a, [b, c]).
 test(sin_elem_ejemplo_2) :- sin_elem([a, a], a, []).
 test(sin_elem_ejemplo_3) :- sin_elem([b, c], a, [b, c]).
+test(sin_elem_sin_instanciar_E) :- sin_elem([1,2,3], 1, LSinE), LSinE = [2,3].
+test(sin_elem_sin_instanciar_LSinE) :- sin_elem([1,2,3], E, [2,3]), E = 1. 
 
 %% testear sublista/2.
 test(sublista2_lista_vacia) :- sublista([1, 2, 3, 4], []).
@@ -50,6 +57,8 @@ test(sublista2_ejemplo) :- sublista([5, 2, 3, 1, 7], [2, 3, 1]).
 %% testear enesimo/3.
 test(enesimo_ejemplo_1) :- enesimo([5, 2, 3, 1, 7], 4, 1).
 test(enesimo_ejemplo_2) :- enesimo([5, 2, [3, 1], 7], 3, [3, 1]).
+test(enesimo_sin_instanciar_N) :- enesimo([5, 2, 3, 1, 7], N, 1), N = 4.
+test(enesimo_sin_instanciar_E) :- enesimo([5, 2, 3, 1, 7], 4, E), E = 1.
 
 %% testear sublist/4.
 test(sublista4_ejemplo) :- sublista([5, 2, 3, 1, 7], [2, 3, 1], 2, 4).
