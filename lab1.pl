@@ -4,7 +4,7 @@
 %% 		listas
 %% ----------------
 
-%% largo(+L,?N) <- N es el largo de la lista L.
+%% largo(?L,?N) <- N es el largo de la lista L.
 %% Ej.: largo([a,b,c],3).
 largo(L, N) :- largo_ac(L, 0, N).
 
@@ -27,21 +27,21 @@ concatenacion([C1|L1], [], [C1|L1]).
 concatenacion([], [C2|L2], [C2|L2]).
 concatenacion([C1|L1], [C2|L2], [C1|L]) :- concatenacion(L1, [C2|L2], L).
 
-%% contenida(?L1,+L2) <- todos los elementos de la lista L1 pertenecen a L2.
+%% contenida(?L1,?L2) <- todos los elementos de la lista L1 pertenecen a L2.
 %% Ej.: contenida([a,b,a,a],[a,b,c]).
 contenida([], _).
 contenida([C|L1], L2) :- member(C, L2), sin_elem(L1, C, L1sinC), sin_elem(L2, C, L2sinC), contenida(L1sinC, L2sinC).
 
-%% ww(?L,+V) <- La lista L es la concatenación consigo misma de una lista W, cuyos elementos pertenecen al conjunto representado por la lista V, largo(L) >= 2.
+%% ww(?L,?V) <- La lista L es la concatenación consigo misma de una lista W, cuyos elementos pertenecen al conjunto representado por la lista V, largo(L) >= 2.
 %% Ej.: ww([a,c,c,a,c,c],[a,b,c]).
-ww(L, V) :- L \= [], concatenacion(L1, L1, L), contenida(L1, V).
+ww(L, V) :- L \== [], concatenacion(L1, L1, L), contenida(L1, V).
 
-%% wwR(?L,+V) <- La lista L es la concatenacion de una lista W y su reverso, con elementos pertenecientes al conjunto representado por la lista V, largo(L) >= 2.
+%% wwR(?L,?V) <- La lista L es la concatenacion de una lista W y su reverso, con elementos pertenecientes al conjunto representado por la lista V, largo(L) >= 2.
 %% Ej.: wwR([a,b,b,a],[a,b]), wwR([a,c,c,a],[a,b,c]).
-wwR(L, V) :- L \= [], concatenacionR(L1, L1, L), contenida(L1, V).
+wwR(L, V) :- L \== [], concatenacionR(L1, L1, L), contenida(L1, V).
 
 %% Predicado auxiliar:
-%% concatenacionR(+L1,+Ac,?L) <- L es la lista que resulta de concatenar el reverso de L1 con L1, utilizando Ac como acumulador para una implementación eficiente.
+%% concatenacionR(+L1,+Ac,?L) <- L es la lista que resulta de concatenar el reverso de L1 con Ac, utilizando Ac como acumulador para una implementación eficiente.
 %% Ej.: concatenacionR([a, b], [a, b], [b, a, a, b]).
 concatenacionR([], Ac, Ac).
 concatenacionR([X|L1], Ac, L) :- concatenacionR(L1, [X|Ac], L).
