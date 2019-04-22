@@ -1,4 +1,4 @@
-:- module(lab1, [largo/2, todos_iguales/1, concatenacion/3, contenida/2, ww/2, wwR/2, sin_elem/3, sublista/2, enesimo/3, sublista/4, matriz/3, valor_celda/4, fila/3, col/3, diagonalD/3]).
+:- module(lab1, [largo/2, todos_iguales/1, concatenacion/3, contenida/2, ww/2, wwR/2, sin_elem/3, sublista/2, enesimo/3, sublista/4, matriz/3, valor_celda/4, fila/3, col/3, diagonalD/3, sopa/3]).
 
 %% ----------------
 %% 		listas
@@ -74,7 +74,7 @@ enesimo(L, N, E) :- enesimo_ac(L, N, 1, E).
 %% enesimo_ac(?L,?N,?Ac,?E) <- E es el N-esimo elemento de la lista L. Se utiliza Ac como acumulador.
 %% Ej.: enesimo_ac([5,2,3,1,7],4,1,1). enesimo_ac([5,2,[3,1],7],3,1,[3,1]).
 enesimo_ac([E|_], Ac, Ac, E).
-enesimo_ac([C|L], N, Ac, E) :- C \= E, Ac1 is Ac+1, enesimo_ac(L, N, Ac1, E).
+enesimo_ac([C|L], N, Ac, E) :- C \== E, Ac1 is Ac+1, enesimo_ac(L, N, Ac1, E).
 
 %% sublista(?L,?Sub,?I,?J) <-   Sub contiene un subconjunto de elementos contiguos de L en el mismo orden que aparecen en L, empezando en la posición I-ésima
 %%                              de L y terminado en la J-ésima.
@@ -130,3 +130,44 @@ diagonalD([_|R],coord(I,J),Dir) :- diagonalD(R,coord(I1,J),Dir), I is I1+1.
 %% Ej.:diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(2,1),[5,-10])
 %% Ej.:diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(1,1),[8])
 %% Ej.:diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(3,1),[7,4,1])
+
+
+%% sopa(+M,+Pals,?Coords) <- Coords es una lista de elementos de la forma p(Pal,((I1,J1),(I2,J2)))
+%% - donde ((I1,J1),(I2,J2)) es el par de coordenadas que indica los índices inicial y final de la palabra Pal (lista de letras) en la matriz M
+%% - debe haber un elemento en Coords para cada palabra de Pals
+reverso_ac([],Ac,Ac).
+reverso_ac([H|T],Ac,Reverso) :- reverso_ac(T,[H|Ac],Reverso).
+reverso(Texto,Reverso) :- reverso_ac(Texto,[],Reverso).
+
+buscaPalabra(Texto,Pal,Ini,Fin) :- sublista(Texto,Pal,Ini,Fin).
+buscaPalabra(Texto,Pal,Ini,Fin) :- reverso(Pal,Reverso), sublista(Texto,Reverso,Fin,Ini).
+
+coordPalabraFilas(M,Pals,p(PalN,[(NroFila,IniCol),(NroFila,FinCol)])) :-
+        enesimo(Pals,_,PalN),
+        fila(M,NroFila,Fila),
+        buscaPalabra(Fila,PalN,IniCol,FinCol).
+
+coordPalabraColumnas(M,Pals,p(PalN,[(IniFila,NroCol),(FinFila,NroCol)])) :-
+        enesimo(Pals,_,PalN),
+        col(M,NroCol,Columna),
+        buscaPalabra(Columna,PalN,IniFila,FinFila).
+
+coordPalabraDiagonal(M,Pals,p(PalN,[(NroFila1,NroCol1),(NroFila2,NroCol2)])) :-
+        enesimo(Pals,_,PalN),
+        diagonalD(M,coord(I,J),Diagonal),
+        buscaPalabra(Diagonal,PalN,Ini,Fin),
+        NroFila1 is I  + Ini - 1,
+        NroCol1  is J  + Ini - 1,
+        NroFila2 is I  + Fin - 1,
+        NroCol2  is J  + Fin - 1.
+
+coordPalabra(M,Pals,Coords) :- coordPalabraFilas(M,Pals,Coords).
+coordPalabra(M,Pals,Coords) :- coordPalabraColumnas(M,Pals,Coords).
+coordPalabra(M,Pals,Coords) :- coordPalabraDiagonal(M,Pals,Coords).
+
+sopa(_,[],[]).
+sopa(M,Pals,[CoordsH|CoordsT]) :-
+        coordPalabra(M,Pals,CoordsH),
+        CoordsH = p(Pal,[(_,_),(_,_)]),
+        sin_elem(Pals,Pal,PalsSinE),
+        sopa(M,PalsSinE,CoordsT).
