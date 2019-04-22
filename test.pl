@@ -102,6 +102,7 @@ test(diagonalD_ejemplo_1) :- diagonalD([[8,-10,1],[5,4,2],[7,9,3]],coord(1,2),[-
 test(diagonalD_ejemplo_2) :- diagonalD([[8,-10,1],[5,4,2],[7,9,3]],coord(2,1),[5,9]).
 test(diagonalD_ejemplo_3) :- diagonalD([[8,-10,1],[5,4,2],[7,9,3]],coord(1,1),[8,4,3]).
 test(diagonalD_ejemplo_4) :- diagonalD([[8,-10,1],[5,4,2],[7,9,3]],coord(3,1),[7]).
+test(diagonalD_ejemplo_5) :- diagonalD([[5,4], [7,9]],coord(1,1),[5,9]).
 
 %% diagonalI(+M,coord((?I,?J),?Inv)/3
 %% test(diagonalI_ejemplo_1) :- diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(3,2),[9,2]).
