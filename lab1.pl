@@ -1,8 +1,10 @@
-:- module(lab1, [largo/2, todos_iguales/1, concatenacion/3, contenida/2, ww/2, wwR/2, sin_elem/3, sublista/2, enesimo/3, sublista/4, matriz/3, valor_celda/4, fila/3, col/3, diagonalD/3, sopa/3]).
+:- module(lab1, [largo/2, todos_iguales/1, concatenacion/3, contenida/2, ww/2, wwR/2, sin_elem/3, sublista/2, enesimo/3, sublista/4, matriz/3, valor_celda/4, fila/3, col/3, diagonalD/3, diagonalI/3, sopa/3]).
+
 
 %% ----------------
 %% 		listas
 %% ----------------
+
 
 %% largo(?L,?N) <- N es el largo de la lista L.
 %% Ej.: largo([a,b,c],3).
@@ -83,6 +85,7 @@ sublista(L, [S|Sub], I, J) :- enesimo(L, I, S), I1 is I+1, sublista(L, Sub, I1, 
 %% 		matrices
 %% ------------------
 
+
 %% matriz(?M,?N,+A) ← A es una matriz de M filas y N columnas. La matriz se representa mediante una lista de M filas, donde cada fila es una lista de N celdas.
 %% Ej.: matriz(3,3,[[8,-10,1],[5,4,2], [7,9,3]]).
 matriz(0,_,[]).
@@ -107,6 +110,19 @@ col([C|R],N,[X|Y]) :- enesimo(C,N,X), col(R,N,Y).
 %% Ej.:diagonalD([[8,-10,1],[5,4,2], [7,9,3]],coord(2,1),[5,9])
 %% Ej.:diagonalD([[8,-10,1],[5,4,2], [7,9,3]],coord(1,1),[8,4,3])
 %% Ej.:diagonalD([[8,-10,1],[5,4,2], [7,9,3]],coord(3,1),[7])
+diagonalD(M,coord(1,J),[DirH|DirT]) :-
+        matriz(CantF,CantC,M),
+        valor_celda(1,J,M,DirH),
+        J1 is J + 1,
+        diagonalDAux(M,2,J1,CantF,CantC,DirT).
+
+diagonalD(M,coord(I,1),[DirH|DirT]) :-
+        matriz(CantF,CantC,M),
+        valor_celda(I,1,M,DirH),
+        I1 is I + 1,
+        diagonalDAux(M,I1,2,CantF,CantC,DirT).
+		
+%% diagonalDAux(+A,?I,?J,+M,+N,?Dir) <- predicado auxiliar en que A es una matriz de M filas y N columnas y el primer elemento de Dir es el valor de la celda I,J en la matriz A. Se itera aumentando en uno el valor de I y e J.
 diagonalDAux(_,I,_,CantF,_,[]) :- I > CantF.
 diagonalDAux(_,_,J,_,CantC,[]) :- J > CantC.
 diagonalDAux(M,CantF,J,CantF,CantC,[DirH|[]]) :- J =< CantC, valor_celda(CantF,J,M,DirH).
@@ -119,23 +135,41 @@ diagonalDAux(M,I,J,CantF,CantC,[DirH|DirT]) :-
         J1 is J + 1,
         diagonalDAux(M,I1,J1,CantF,CantC,DirT).
 
-diagonalD(M,coord(1,J),[DirH|DirT]) :-
-        matriz(CantF,CantC,M),
-        valor_celda(1,J,M,DirH),
-        J1 is J + 1,
-        diagonalDAux(M,2,J1,CantF,CantC,DirT).
-
-diagonalD(M,coord(I,1),[DirH|DirT]) :-
-        matriz(CantF,CantC,M),
-        valor_celda(I,1,M,DirH),
-        I1 is I + 1,
-        diagonalDAux(M,I1,2,CantF,CantC,DirT).
-
+		
 %% diagonalI(+M,coord((?I,?J),?Inv) <- Inv es una una diagonal inversa de la matriz M, con índices de fila consecutivos decrecientes y de columna consecutivos crecientes. El 1er elemento de Inv tiene coordenadas I,J. Los elementos de la columna 1 y los de la última fila son los posibles 1eros elementos de Inv
 %% Ej.:diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(3,2),[9,2])
 %% Ej.:diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(2,1),[5,-10])
 %% Ej.:diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(1,1),[8])
 %% Ej.:diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(3,1),[7,4,1])
+diagonalI(M,coord(I,1),[DirH|DirT]) :-
+        matriz(_,CantC,M),
+        valor_celda(I,1,M,DirH),
+        I1 is I - 1,
+        diagonalIAux(M,I1,2,CantC,DirT).
+
+diagonalI(M,coord(CantF,J),[DirH|DirT]) :-
+        matriz(CantF,CantC,M),
+        valor_celda(CantF,J,M,DirH),
+        I1 is CantF - 1,
+		J1 is J + 1,
+        diagonalIAux(M,I1,J1,CantC,DirT).
+
+%% diagonalIAux(+A,?I,?J,+N,?Dir) <- predicado auxiliar en que A es una matriz de N columnas y el primer elemento de Dir es el valor de la celda I,J en la matriz A. A diferencia de diagonalDAux, se itera decrementando en uno el valor de I y aumentando en uno el valor de J.
+diagonalIAux(_,0,_,_,[]).
+diagonalIAux(_,_,J,CantC,[]) :- J > CantC.
+diagonalIAux(M,1,J,CantC,[DirH|[]]) :- J =< CantC, valor_celda(1,J,M,DirH).
+diagonalIAux(M,I,CantC,CantC,[DirH|[]]) :- I > 0, valor_celda(I,CantC,M,DirH).
+diagonalIAux(M,I,J,CantC,[DirH|DirT]) :-
+        I > 0,
+        J < CantC,
+        valor_celda(I,J,M,DirH),
+        I1 is I - 1,
+        J1 is J + 1,
+        diagonalIAux(M,I1,J1,CantC,DirT).
+		
+%% --------------
+%% 		sopa
+%% --------------
 
 
 %% sopa(+M,+Pals,?Coords) <- Coords es una lista de elementos de la forma p(Pal,((I1,J1),(I2,J2)))

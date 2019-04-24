@@ -113,13 +113,30 @@ test(diagonalD_ejemplo_1) :- diagonalD([[8,-10,1],[5,4,2],[7,9,3]],coord(1,2),[-
 test(diagonalD_ejemplo_2) :- diagonalD([[8,-10,1],[5,4,2],[7,9,3]],coord(2,1),[5,9]).
 test(diagonalD_ejemplo_3) :- diagonalD([[8,-10,1],[5,4,2],[7,9,3]],coord(1,1),[8,4,3]).
 test(diagonalD_ejemplo_4) :- diagonalD([[8,-10,1],[5,4,2],[7,9,3]],coord(3,1),[7]).
-test(diagonalD_ejemplo_5) :- diagonalD([[5,4], [7,9]],coord(1,1),[5,9]).
+test(diagonalD_caso_1) :- diagonalD([[5,4], [7,9]],coord(1,1),[5,9]).
+test(diagonalD_caso_2) :- diagonalD([[5,4], [7,9]],coord(I,J),[5,9]), I=1, J=1.
+test(diagonalD_caso_3) :- diagonalD([[5,4], [7,9]],coord(1,2),[4]).
+test(diagonalD_caso_4) :- diagonalD([[5,4]],coord(1,1),[5]).
+test(diagonalD_caso_5) :- diagonalD([[5,4]],coord(1,2),[4]).
+test(diagonalD_caso_6) :- diagonalD([[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]],coord(I,J),[1,6,11,16]),I=1,J=1.
+test(diagonalD_caso_7) :- diagonalD([[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]],coord(1,3),X),X=[3,8].
+test(diagonalD_caso_8) :- diagonalD([[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]],coord(I,J),[5,10,15]),I=2,J=1.
+test(diagonalD_caso_9) :- diagonalD([[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]],coord(4,1),[13]).
 
 %% diagonalI(+M,coord((?I,?J),?Inv)/3
-%% test(diagonalI_ejemplo_1) :- diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(3,2),[9,2]).
-%% test(diagonalI_ejemplo_2) :- diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(2,1),[5,-10]).
-%% test(diagonalI_ejemplo_3) :- diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(1,1),[8]).
-%% test(diagonalI_ejemplo_4) :- diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(3,1),[7,4,1]).
+test(diagonalI_ejemplo_1) :- diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(3,2),[9,2]).
+test(diagonalI_ejemplo_2) :- diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(2,1),[5,-10]).
+test(diagonalI_ejemplo_3) :- diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(1,1),[8]).
+test(diagonalI_ejemplo_4) :- diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(3,1),[7,4,1]).
+test(diagonalI_caso_1) :- diagonalI([[5,4], [7,9]],coord(1,1),[5]).
+test(diagonalI_caso_2) :- diagonalI([[5,4], [7,9]],coord(I,J),[7,4]), I=2, J=1.
+test(diagonalI_caso_3) :- diagonalI([[5,4], [7,9]],coord(2,2),[9]).
+test(diagonalI_caso_4) :- diagonalI([[5,4]],coord(1,1),[5]).
+test(diagonalI_caso_5) :- diagonalI([[5,4]],coord(1,2),[4]).
+test(diagonalI_caso_6) :- diagonalI([[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]],coord(I,J),[13,10,7,4]),I=4,J=1.
+test(diagonalI_caso_7) :- diagonalI([[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]],coord(4,3),X),X=[15,12].
+test(diagonalI_caso_8) :- diagonalI([[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]],coord(I,J),[14,11,8]),I=4,J=2.
+test(diagonalI_caso_9) :- diagonalI([[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]],coord(4,4),[16]).
 
 %% sopa/3
 matrizSopa([[a,c,a,v,d,c,k,c],
