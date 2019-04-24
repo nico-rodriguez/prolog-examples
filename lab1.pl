@@ -95,23 +95,16 @@ matriz(M,N,[C|R]) :- matriz(M1,N,R), largo(C,N), M is M1+1.
 
 %% valor_celda(+I,+J,+A,?E) <- E es el contenido de la celda (I,J) de la matriz A.
 %% Ej.: valor_celda(2,1,[[8,-10,1],[5,4,2], [7,9,3]],5)
-valor_celda(1,J,[C|_],E) :- valor_posicion(J,C,E).
-valor_celda(I,J,[_|R],E) :- valor_celda(I1,J,R,E), I is I1+1.
-
-%% valor_posicion(?J,+F,?E) ← E es el contenido de la posicion j de la fila F.
-%% Ej.: valor_posicion(2,[2,3,5],3)
-valor_posicion(1,[C|_],C).
-valor_posicion(J,[_|R],E) :- valor_posicion(J1,R,E), J is J1+1.
+valor_celda(I,J,A,E) :- enesimo(A,I,F), enesimo(F,J,E).
 
 %% fila(+M,?N,?F) <- F es la fila N-ésima de la matriz
 %% Ej.: fila([[8,-10,1],[5,4,2],[7,9,3]],3,[7,9,3]).
-fila([C|_],1,C).
-fila([_|R],N,F) :- fila(R,N1,F), N is N1+1.
+fila(M,N,F) :- enesimo(M,N,F).
 
 %% col(+M,?N,?C) <- C es la columna N-ésima de la matriz
 %% Ej.: col([[8,-10,1],[5,4,2],[7,9,3]],2,[-10,4,9])
 col([],_,[]).
-col([C|R],N,[X|Y]) :- valor_posicion(N,C,X), col(R,N,Y).
+col([C|R],N,[X|Y]) :- enesimo(C,N,X), col(R,N,Y).
 
 
 %% diagonalD(+M,coord(?I,?J),?Dir) <- Dir es una diagonal de la matriz M, con índices de fila y de columna consecutivos crecientes. El 1er elemento de Dir tiene coordenadas I,J. Los elementos de la fila 1 y los de la columna 1 son los posibles 1eros elementos de Dir
@@ -119,12 +112,29 @@ col([C|R],N,[X|Y]) :- valor_posicion(N,C,X), col(R,N,Y).
 %% Ej.:diagonalD([[8,-10,1],[5,4,2], [7,9,3]],coord(2,1),[5,9])
 %% Ej.:diagonalD([[8,-10,1],[5,4,2], [7,9,3]],coord(1,1),[8,4,3])
 %% Ej.:diagonalD([[8,-10,1],[5,4,2], [7,9,3]],coord(3,1),[7])
-diagonalD([C],coord(1,N),[E]) :- valor_posicion(N,C,E).
-diagonalD(A,coord(1,J),[C]) :- matriz(_,N,A), J=N, valor_celda(1,J,A,C).
-diagonalD([C|R],coord(1,J),[X|Y]) :- matriz(_,_,[C|R]), diagonalD(R,coord(1,J1),Y), valor_posicion(J,C,X),  J is J1-1.
-diagonalD([_|R],coord(I,J),Dir) :- diagonalD(R,coord(I1,J),Dir), I is I1+1.
+diagonalDAux(_,I,_,CantF,_,[]) :- I > CantF.
+diagonalDAux(_,_,J,_,CantC,[]) :- J > CantC.
+diagonalDAux(M,CantF,J,CantF,CantC,[DirH|[]]) :- J =< CantC, valor_celda(CantF,J,M,DirH).
+diagonalDAux(M,I,CantC,CantF,CantC,[DirH|[]]) :- I < CantF, valor_celda(I,CantC,M,DirH).
+diagonalDAux(M,I,J,CantF,CantC,[DirH|DirT]) :-
+        I < CantF,
+        J < CantC,
+        valor_celda(I,J,M,DirH),
+        I1 is I + 1,
+        J1 is J + 1,
+        diagonalDAux(M,I1,J1,CantF,CantC,DirT).
 
+diagonalD(M,coord(1,J),[DirH|DirT]) :-
+        matriz(CantF,CantC,M),
+        valor_celda(1,J,M,DirH),
+        J1 is J + 1,
+        diagonalDAux(M,2,J1,CantF,CantC,DirT).
 
+diagonalD(M,coord(I,1),[DirH|DirT]) :-
+        matriz(CantF,CantC,M),
+        valor_celda(I,1,M,DirH),
+        I1 is I + 1,
+        diagonalDAux(M,I1,2,CantF,CantC,DirT).
 
 %% diagonalI(+M,coord((?I,?J),?Inv) <- Inv es una una diagonal inversa de la matriz M, con índices de fila consecutivos decrecientes y de columna consecutivos crecientes. El 1er elemento de Inv tiene coordenadas I,J. Los elementos de la columna 1 y los de la última fila son los posibles 1eros elementos de Inv
 %% Ej.:diagonalI([[8,-10,1],[5,4,2], [7,9,3]],coord(3,2),[9,2])
@@ -153,7 +163,7 @@ coordPalabraColumnas(M,Pals,p(PalN,[(IniFila,NroCol),(FinFila,NroCol)])) :-
         col(M,NroCol,Columna),
         buscaPalabra(Columna,PalN,IniFila,FinFila).
 
-coordPalabraDiagonal(M,Pals,p(PalN,[(NroFila1,NroCol1),(NroFila2,NroCol2)])) :-
+coordPalabraDiagonalD(M,Pals,p(PalN,[(NroFila1,NroCol1),(NroFila2,NroCol2)])) :-
         enesimo(Pals,_,PalN),
         diagonalD(M,coord(I,J),Diagonal),
         buscaPalabra(Diagonal,PalN,Ini,Fin),
@@ -164,7 +174,7 @@ coordPalabraDiagonal(M,Pals,p(PalN,[(NroFila1,NroCol1),(NroFila2,NroCol2)])) :-
 
 coordPalabra(M,Pals,Coords) :- coordPalabraFilas(M,Pals,Coords).
 coordPalabra(M,Pals,Coords) :- coordPalabraColumnas(M,Pals,Coords).
-coordPalabra(M,Pals,Coords) :- coordPalabraDiagonal(M,Pals,Coords).
+coordPalabra(M,Pals,Coords) :- coordPalabraDiagonalD(M,Pals,Coords).
 
 sopa(_,[],[]).
 sopa(M,Pals,[CoordsH|CoordsT]) :-
