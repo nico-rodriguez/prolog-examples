@@ -151,13 +151,22 @@ matrizSopa([[a,c,a,v,d,c,k,c],
 palabras([[c,e,r,d,o],
           [p,a,v,o],
           [l,e,a,l],
+          [v,a,c,a],
+          [g,a,l,l,i,n,a],
+          [c,o,n,e,j,o],
+          [p,a,t,o],
           [o,v,e,j,a],
           [p,o,l,l,o]]).
+
 
 coordenadas([p([c,e,r,d,o],[(1,8),(5,8)]),
              p([p,a,v,o],[(5,1),(2,1)]),
              p([l,e,a,l],[(6,3),(6,6)]),
              p([o,v,e,j,a],[(4,2),(8,6)]),
+             p([c,o,n,e,j,o],[(1,6),(6,1)]),
+             p([g,a,l,l,i,n,a],[(8,1),(2,7)]),
+             p([p,a,t,o],[(7,4),(4,7)]),
+             p([v,a,c,a],[(1,4),(1,1)]),
              p([p,o,l,l,o],[(4,4),(8,8)])]).
 
 test(sopa_caso_1):- matrizSopa(MatrizSopa),
