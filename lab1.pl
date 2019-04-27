@@ -119,17 +119,16 @@ diagonalD(M,coord(1,J),[DirH|DirT]) :-
 diagonalD(M,coord(I,1),[DirH|DirT]) :-
         matriz(CantF,CantC,M),
         valor_celda(I,1,M,DirH),
+        I > 1,
         I1 is I + 1,
         diagonalDAux(M,I1,2,CantF,CantC,DirT).
 		
 %% diagonalDAux(+A,?I,?J,+M,+N,?Dir) <- predicado auxiliar en que A es una matriz de M filas y N columnas y el primer elemento de Dir es el valor de la celda I,J en la matriz A. Se itera aumentando en uno el valor de I y e J.
 diagonalDAux(_,I,_,CantF,_,[]) :- I > CantF.
-diagonalDAux(_,_,J,_,CantC,[]) :- J > CantC.
-diagonalDAux(M,CantF,J,CantF,CantC,[DirH|[]]) :- J =< CantC, valor_celda(CantF,J,M,DirH).
-diagonalDAux(M,I,CantC,CantF,CantC,[DirH|[]]) :- I < CantF, valor_celda(I,CantC,M,DirH).
+diagonalDAux(_,I,J,CantF,CantC,[]) :- I =< CantF, J > CantC.
 diagonalDAux(M,I,J,CantF,CantC,[DirH|DirT]) :-
-        I < CantF,
-        J < CantC,
+        I =< CantF,
+        J =< CantC,
         valor_celda(I,J,M,DirH),
         I1 is I + 1,
         J1 is J + 1,
@@ -150,18 +149,17 @@ diagonalI(M,coord(I,1),[DirH|DirT]) :-
 diagonalI(M,coord(CantF,J),[DirH|DirT]) :-
         matriz(CantF,CantC,M),
         valor_celda(CantF,J,M,DirH),
+        J > 1,
         I1 is CantF - 1,
-		J1 is J + 1,
+        J1 is J + 1,
         diagonalIAux(M,I1,J1,CantC,DirT).
 
 %% diagonalIAux(+A,?I,?J,+N,?Dir) <- predicado auxiliar en que A es una matriz de N columnas y el primer elemento de Dir es el valor de la celda I,J en la matriz A. A diferencia de diagonalDAux, se itera decrementando en uno el valor de I y aumentando en uno el valor de J.
 diagonalIAux(_,0,_,_,[]).
-diagonalIAux(_,_,J,CantC,[]) :- J > CantC.
-diagonalIAux(M,1,J,CantC,[DirH|[]]) :- J =< CantC, valor_celda(1,J,M,DirH).
-diagonalIAux(M,I,CantC,CantC,[DirH|[]]) :- I > 0, valor_celda(I,CantC,M,DirH).
+diagonalIAux(_,I,J,CantC,[]) :- I > 0, J > CantC.
 diagonalIAux(M,I,J,CantC,[DirH|DirT]) :-
         I > 0,
-        J < CantC,
+        J =< CantC,
         valor_celda(I,J,M,DirH),
         I1 is I - 1,
         J1 is J + 1,
