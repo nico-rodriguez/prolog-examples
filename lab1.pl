@@ -170,52 +170,56 @@ diagonalIAux(M,I,J,CantC,[DirH|DirT]) :-
 %% --------------
 
 
-%% sopa(+M,+Pals,?Coords) <- Coords es una lista de elementos de la forma p(Pal,((I1,J1),(I2,J2)))
-%% - donde ((I1,J1),(I2,J2)) es el par de coordenadas que indica los índices inicial y final de la palabra Pal (lista de letras) en la matriz M
-%% - debe haber un elemento en Coords para cada palabra de Pals
+%% reverso(+Texto,?Reverso) <- Reverso es el resultado de invertir la lista Texto
 reverso_ac([],Ac,Ac).
 reverso_ac([H|T],Ac,Reverso) :- reverso_ac(T,[H|Ac],Reverso).
 reverso(Texto,Reverso) :- reverso_ac(Texto,[],Reverso).
 
+%% buscaPalabra(+Texto,+Pal,?Ini,?Fin) <- La palabra Pal esta contenida en la lista Texto. Los indices de inicio y fin dependen de si la palabra esta en sentido original o inverso.
 buscaPalabra(Texto,Pal,Ini,Fin) :- sublista(Texto,Pal,Ini,Fin).
 buscaPalabra(Texto,Pal,Ini,Fin) :- reverso(Pal,Reverso), sublista(Texto,Reverso,Fin,Ini).
 
-coordPalabraFilas(M,Pals,p(PalN,[(NroFila,IniCol),(NroFila,FinCol)])) :-
-        enesimo(Pals,_,PalN),
+%% coordPalabraFilas(+M,?Coord) <- Coords contiene los indices de inicio y fin de una palabra en la matriz M, que puede estar en sentido original o inverso, en alguna fila.
+coordPalabraFilas(M,p(Pal,[(NroFila,IniCol),(NroFila,FinCol)])) :-
         fila(M,NroFila,Fila),
-        buscaPalabra(Fila,PalN,IniCol,FinCol).
+        buscaPalabra(Fila,Pal,IniCol,FinCol).
 
-coordPalabraColumnas(M,Pals,p(PalN,[(IniFila,NroCol),(FinFila,NroCol)])) :-
-        enesimo(Pals,_,PalN),
+%% coordPalabraColumnas(+M,?Coord) <- Coords contiene los indices de inicio y fin de una palabra en la matriz M, que puede estar en sentido original o inverso, en alguna columna.
+coordPalabraColumnas(M,p(Pal,[(IniFila,NroCol),(FinFila,NroCol)])) :-
         col(M,NroCol,Columna),
-        buscaPalabra(Columna,PalN,IniFila,FinFila).
+        buscaPalabra(Columna,Pal,IniFila,FinFila).
 
-coordPalabraDiagonalD(M,Pals,p(PalN,[(NroFila1,NroCol1),(NroFila2,NroCol2)])) :-
-        enesimo(Pals,_,PalN),
+%% coordPalabraDiagonalD(+M,?Coord) <- Coord contiene los indices de inicio y fin de una palabra en la matriz M, que puede estar en sentido original o inverso, en alguna diagonal simple.
+coordPalabraDiagonalD(M,p(Pal,[(NroFila1,NroCol1),(NroFila2,NroCol2)])) :-
         diagonalD(M,coord(I,J),Diagonal),
-        buscaPalabra(Diagonal,PalN,Ini,Fin),
+        buscaPalabra(Diagonal,Pal,Ini,Fin),
         NroFila1 is I  + Ini - 1,
         NroCol1  is J  + Ini - 1,
         NroFila2 is I  + Fin - 1,
         NroCol2  is J  + Fin - 1.
 
-coordPalabraDiagonalI(M,Pals,p(PalN,[(NroFila1,NroCol1),(NroFila2,NroCol2)])) :-
-        enesimo(Pals,_,PalN),
+%% coordPalabraDiagonalI(+M,?Coord) <- Coord contiene los indices de inicio y fin de una palabra en la matriz M, que puede estar en sentido original o inverso, en alguna diagonal inversa.
+coordPalabraDiagonalI(M,p(Pal,[(NroFila1,NroCol1),(NroFila2,NroCol2)])) :-
         diagonalI(M,coord(I,J),Diagonal),
-        buscaPalabra(Diagonal,PalN,Ini,Fin),
+        buscaPalabra(Diagonal,Pal,Ini,Fin),
         NroFila1 is I  - Ini + 1,
         NroCol1  is J  + Ini - 1,
         NroFila2 is I  - Fin + 1,
         NroCol2  is J  + Fin - 1.
 
-coordPalabra(M,Pals,Coords) :- coordPalabraFilas(M,Pals,Coords).
-coordPalabra(M,Pals,Coords) :- coordPalabraColumnas(M,Pals,Coords).
-coordPalabra(M,Pals,Coords) :- coordPalabraDiagonalD(M,Pals,Coords).
-coordPalabra(M,Pals,Coords) :- coordPalabraDiagonalI(M,Pals,Coords).
+%% coordPalabra(+M,?Coord) <- Coords contiene los indices de inicio y fin de una palabra en la matriz M, que puede estar en sentido original o inverso, en filas, columnas o diagonales.
+coordPalabra(M,Coord) :- coordPalabraFilas(M,Coord).
+coordPalabra(M,Coord) :- coordPalabraColumnas(M,Coord).
+coordPalabra(M,Coord) :- coordPalabraDiagonalD(M,Coord).
+coordPalabra(M,Coord) :- coordPalabraDiagonalI(M,Coord).
 
+%% sopa(+M,+Pals,?Coords) <- Coords es una lista de elementos de la forma p(Pal,((I1,J1),(I2,J2)))
+%% - donde ((I1,J1),(I2,J2)) es el par de coordenadas que indica los índices inicial y final de la palabra Pal (lista de letras) en la matriz M
+%% - debe haber un elemento en Coords para cada palabra de Pals
 sopa(_,[],[]).
 sopa(M,Pals,[CoordsH|CoordsT]) :-
-        coordPalabra(M,Pals,CoordsH),
         CoordsH = p(Pal,[(_,_),(_,_)]),
+        enesimo(Pals,_,Pal),
+        coordPalabra(M,CoordsH),
         sin_elem(Pals,Pal,PalsSinE),
         sopa(M,PalsSinE,CoordsT).
